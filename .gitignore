@@ -1,0 +1,27 @@
+# Build artifacts and binaries
+*.o
+*.obj
+*.so
+*.a
+*.dylib
+*.dll
+run_tests
+bin/
+build/
+build-*/
+
+# PROS build artifacts & templates
+Vektor@*.zip
+.pros/
+
+# Agent configuration
+.agent/
+.agents/
+
+# IDE and OS metadata
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
