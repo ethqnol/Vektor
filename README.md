@@ -1,8 +1,4 @@
-# Vektor Robotics Library
-
-**Vektor** is a high-performance, hand-crafted C++20 drivetrain, odometry, and autonomous motion library designed for PROS on VEX V5 hardware.
-
----
+**Vektor** is a high-performance library designed for PROS on VEX V5 hardware.k
 
 ## Key Features
 
@@ -14,28 +10,25 @@
   * Boomerang curve pose alignment (`MoveToPoseAction`).
   * Pure Pursuit path following (`FollowPathAction`).
   * Non-blocking spatial triggers & event callbacks (`add_spatial_trigger`).
-* **Absolute vs. Relative Field Mapping**: Seamlessly switch between field-centric absolute coordinates ($(0, 0)$ at center of field) and robot-relative starting coordinates.
+* **Absolute vs. Relative Field Mapping**: Switch between field-centric absolute coordinates ($(0, 0)$ at center of field) and robot-relative starting coordinates.
 * **Driver Control (Opcontrol)**:
-  * Arcade, Tank, and Cheesy Curvature steering modes.
-  * Exponential joystick response curves (`DriveCurve`) with customizable deadbands and voltage desaturation.
-
----
+  * Arcade, Tank steering modes.
+  * Exponential joystick response curves (`DriveCurve`) 
 
 ## Deployment & Installation
 
-### Option 1: PROS Template Installation (Recommended)
+### Option 1: PROS Template Installation
 
 Generate the Vektor template package and apply it to any PROS project:
 
 ```bash
-# 1. Package Vektor into a PROS template
-cd /home/ewu/Code/Vektor
+
+git clone https://github.com/ethqnol/Vektor.git
+cd path/to/Vektor
 pros c create-template . Vektor 1.0.0 --target v5 --system "include/Vektor/*.hpp" --system "src/Vektor/*.cpp"
 
-# 2. Fetch the template into PROS depot
 pros c fetch Vektor@1.0.0.zip
 
-# 3. Apply to your robot project
 cd /path/to/your_pros_project
 pros c apply Vektor
 ```
@@ -45,8 +38,9 @@ pros c apply Vektor
 Copy the source files directly into your robot project:
 
 ```bash
-cp -r /home/ewu/Code/Vektor/include/Vektor /path/to/your_pros_project/include/
-cp -r /home/ewu/Code/Vektor/src/Vektor /path/to/your_pros_project/src/
+git clone https://github.com/ethqnol/Vektor.git
+cp -r path/to/Vektor/include/Vektor /path/to/your_pros_project/include/
+cp -r path/to/Vektor/src/Vektor /path/to/your_pros_project/src/
 ```
 
 ---
@@ -99,7 +93,6 @@ void initialize() {
 }
 
 void autonomous() {
-    // Chain autonomous actions using SequenceBuilder
     chassis->new_sequence()
         .move_to(Pose(-24_in, 24_in, 45_deg), 2.5_sec, CoordinateFrame::ABSOLUTE)
         .turn_to(180_deg, 1.2_sec)
@@ -124,7 +117,7 @@ void opcontrol() {
 
 ## Native Unit Testing
 
-Run the C++ unit test suite locally:
+Run the C++ unit tests locally:
 
 ```bash
 make test
