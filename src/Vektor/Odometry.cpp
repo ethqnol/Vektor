@@ -1,5 +1,7 @@
 #include "Vektor/Odometry.hpp"
+#include "pros/error.h"
 #include <cmath>
+#include <mutex> // for std::lock_guard
 
 namespace Vektor {
 
@@ -49,7 +51,7 @@ Odometry::~Odometry() {
 }
 
 void Odometry::start() {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<pros::Mutex> lock(mutex_);
     if (running_) return;
 
     running_ = true;
@@ -60,7 +62,7 @@ void Odometry::start() {
 
 void Odometry::stop() {
     {
-        std::lock_guard<std::mutex> lock(mutex_);
+        std::lock_guard<pros::Mutex> lock(mutex_);
         if (!running_) return;
         running_ = false;
     }
@@ -68,7 +70,7 @@ void Odometry::stop() {
 }
 
 void Odometry::set_starting_pose(const Pose& absolute_start_pose) {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<pros::Mutex> lock(mutex_);
     starting_pose_ = absolute_start_pose;
     // Set current absolute pose equal to starting pose
     pose_ = absolute_start_pose;
@@ -79,12 +81,12 @@ void Odometry::set_starting_pose(const Pose& absolute_start_pose) {
 }
 
 Pose Odometry::get_starting_pose() const {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<pros::Mutex> lock(mutex_);
     return starting_pose_;
 }
 
 Pose Odometry::get_pose(CoordinateFrame frame) {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<pros::Mutex> lock(mutex_);
     if (frame == CoordinateFrame::RELATIVE) {
         return pose_.to_relative(starting_pose_);
     }
@@ -92,7 +94,7 @@ Pose Odometry::get_pose(CoordinateFrame frame) {
 }
 
 void Odometry::set_pose(const Pose& pose, CoordinateFrame frame) {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard<pros::Mutex> lock(mutex_);
     if (frame == CoordinateFrame::RELATIVE) {
         pose_ = pose.to_absolute(starting_pose_);
     } else {
@@ -140,7 +142,7 @@ void Odometry::run_loop() {
 
     while (true) {
         {
-            std::lock_guard<std::mutex> lock(mutex_);
+            std::lock_guard<pros::Mutex> lock(mutex_);
             if (!running_) break;
         }
 
@@ -205,7 +207,7 @@ void Odometry::run_loop() {
         double dY = local_y * sin_avg + local_x * cos_avg;
 
         {
-            std::lock_guard<std::mutex> lock(mutex_);
+            std::lock_guard<pros::Mutex> lock(mutex_);
             pose_.x += Length::inches(dX);
             pose_.y += Length::inches(dY);
             pose_.theta = Angle::rad(cur_theta).constrain();

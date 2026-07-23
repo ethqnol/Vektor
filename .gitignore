@@ -25,3 +25,8 @@ Vektor@*.zip
 *.swo
 *~
 .DS_Store
+
+
+
+.d
+compile_commands.json
