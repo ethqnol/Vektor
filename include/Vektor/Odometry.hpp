@@ -6,7 +6,6 @@
 #include "pros/motor_group.hpp"
 #include "pros/rtos.hpp"
 #include <memory>
-#include <mutex>
 
 namespace Vektor {
 
@@ -62,7 +61,7 @@ private:
     double drive_gear_ratio_;
 
     std::unique_ptr<pros::Task> task_;
-    mutable std::mutex mutex_;
+    mutable pros::Mutex mutex_;
     Pose pose_{0.0_in, 0.0_in, 0.0_rad};          // pose stored in absolute field coordinates
     Pose starting_pose_{0.0_in, 0.0_in, 0.0_rad}; // absolute starting pose offset
     bool running_{false};
